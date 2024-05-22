@@ -2,3 +2,23 @@
 kind: golang.Generate
 spec:
     versionPackagePath: internal/version
+---
+kind: common.Image
+name: image-extensions-validator
+spec:
+    extraEnvironment:
+      PLATFORM: linux/amd64,linux/arm64
+---
+kind: golang.Build
+spec:
+  outputs:
+    linux-amd64:
+      GOOS: linux
+      GOARCH: amd64
+    linux-arm64:
+      GOOS: linux
+      GOARCH: arm64
+---
+kind: service.CodeCov
+spec:
+  enabled: false

@@ -1,6 +1,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED, PLEASE DO NOT EDIT.
 #
-# Generated on 2024-05-22T14:13:32Z by kres 5fac898.
+# Generated on 2024-05-22T14:44:11Z by kres 5fac898.
 
 # common variables
 
@@ -185,8 +185,15 @@ $(ARTIFACTS)/extensions-validator-linux-amd64:
 .PHONY: extensions-validator-linux-amd64
 extensions-validator-linux-amd64: $(ARTIFACTS)/extensions-validator-linux-amd64  ## Builds executable for extensions-validator-linux-amd64.
 
+.PHONY: $(ARTIFACTS)/extensions-validator-linux-arm64
+$(ARTIFACTS)/extensions-validator-linux-arm64:
+	@$(MAKE) local-extensions-validator-linux-arm64 DEST=$(ARTIFACTS)
+
+.PHONY: extensions-validator-linux-arm64
+extensions-validator-linux-arm64: $(ARTIFACTS)/extensions-validator-linux-arm64  ## Builds executable for extensions-validator-linux-arm64.
+
 .PHONY: extensions-validator
-extensions-validator: extensions-validator-linux-amd64  ## Builds executables for extensions-validator.
+extensions-validator: extensions-validator-linux-amd64 extensions-validator-linux-arm64  ## Builds executables for extensions-validator.
 
 .PHONY: lint-markdown
 lint-markdown:  ## Runs markdownlint.

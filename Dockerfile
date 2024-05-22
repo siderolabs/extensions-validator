@@ -2,7 +2,7 @@
 
 # THIS FILE WAS AUTOMATICALLY GENERATED, PLEASE DO NOT EDIT.
 #
-# Generated on 2024-05-22T14:13:32Z by kres 5fac898.
+# Generated on 2024-05-23T11:32:13Z by kres 2688b70.
 
 ARG TOOLCHAIN
 
@@ -20,7 +20,7 @@ COPY ./README.md ./README.md
 RUN markdownlint --ignore "CHANGELOG.md" --ignore "**/node_modules/**" --ignore '**/hack/chglog/**' --rules node_modules/sentences-per-line/index.js .
 
 # base toolchain image
-FROM ${TOOLCHAIN} AS toolchain
+FROM --platform=${BUILDPLATFORM} ${TOOLCHAIN} AS toolchain
 RUN apk --update --no-cache add bash curl build-base protoc protobuf-dev
 
 # build tools
@@ -117,15 +117,31 @@ ARG GO_LDFLAGS
 ARG VERSION_PKG="internal/version"
 ARG SHA
 ARG TAG
-RUN --mount=type=cache,target=/root/.cache/go-build --mount=type=cache,target=/go/pkg go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS} -X ${VERSION_PKG}.Name=extensions-validator -X ${VERSION_PKG}.SHA=${SHA} -X ${VERSION_PKG}.Tag=${TAG}" -o /extensions-validator-linux-amd64
+RUN --mount=type=cache,target=/root/.cache/go-build --mount=type=cache,target=/go/pkg GOARCH=amd64 GOOS=linux go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS} -X ${VERSION_PKG}.Name=extensions-validator -X ${VERSION_PKG}.SHA=${SHA} -X ${VERSION_PKG}.Tag=${TAG}" -o /extensions-validator-linux-amd64
+
+# builds extensions-validator-linux-arm64
+FROM base AS extensions-validator-linux-arm64-build
+COPY --from=generate / /
+COPY --from=embed-generate / /
+WORKDIR /src/cmd/extensions-validator
+ARG GO_BUILDFLAGS
+ARG GO_LDFLAGS
+ARG VERSION_PKG="internal/version"
+ARG SHA
+ARG TAG
+RUN --mount=type=cache,target=/root/.cache/go-build --mount=type=cache,target=/go/pkg GOARCH=arm64 GOOS=linux go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS} -X ${VERSION_PKG}.Name=extensions-validator -X ${VERSION_PKG}.SHA=${SHA} -X ${VERSION_PKG}.Tag=${TAG}" -o /extensions-validator-linux-arm64
 
 FROM scratch AS extensions-validator-linux-amd64
 COPY --from=extensions-validator-linux-amd64-build /extensions-validator-linux-amd64 /extensions-validator-linux-amd64
+
+FROM scratch AS extensions-validator-linux-arm64
+COPY --from=extensions-validator-linux-arm64-build /extensions-validator-linux-arm64 /extensions-validator-linux-arm64
 
 FROM extensions-validator-linux-${TARGETARCH} AS extensions-validator
 
 FROM scratch AS extensions-validator-all
 COPY --from=extensions-validator-linux-amd64 / /
+COPY --from=extensions-validator-linux-arm64 / /
 
 FROM scratch AS image-extensions-validator
 ARG TARGETARCH

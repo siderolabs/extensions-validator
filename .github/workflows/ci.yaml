@@ -1,6 +1,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED, PLEASE DO NOT EDIT.
 #
-# Generated on 2024-05-22T14:12:48Z by kres 5fac898.
+# Generated on 2024-05-23T11:32:13Z by kres 2688b70.
 
 name: default
 concurrency:
@@ -30,6 +30,31 @@ jobs:
       - generic
     if: (!startsWith(github.head_ref, 'renovate/') && !startsWith(github.head_ref, 'dependabot/'))
     steps:
+      - name: gather-system-info
+        id: system-info
+        uses: kenchan0130/actions-system-info@v1.3.0
+        continue-on-error: true
+      - name: print-system-info
+        run: |
+          MEMORY_GB=$((${{ steps.system-info.outputs.totalmem }}/1024/1024/1024))
+
+          OUTPUTS=(
+            "CPU Core: ${{ steps.system-info.outputs.cpu-core }}"
+            "CPU Model: ${{ steps.system-info.outputs.cpu-model }}"
+            "Hostname: ${{ steps.system-info.outputs.hostname }}"
+            "NodeName: ${NODE_NAME}"
+            "Kernel release: ${{ steps.system-info.outputs.kernel-release }}"
+            "Kernel version: ${{ steps.system-info.outputs.kernel-version }}"
+            "Name: ${{ steps.system-info.outputs.name }}"
+            "Platform: ${{ steps.system-info.outputs.platform }}"
+            "Release: ${{ steps.system-info.outputs.release }}"
+            "Total memory: ${MEMORY_GB} GB"
+          )
+
+          for OUTPUT in "${OUTPUTS[@]}";do
+            echo "${OUTPUT}"
+          done
+        continue-on-error: true
       - name: checkout
         uses: actions/checkout@v4
       - name: Unshallow
@@ -51,12 +76,6 @@ jobs:
       - name: unit-tests-race
         run: |
           make unit-tests-race
-      - name: coverage
-        uses: codecov/codecov-action@v4
-        with:
-          files: _out/coverage-unit-tests.txt
-          token: ${{ secrets.CODECOV_TOKEN }}
-        timeout-minutes: 3
       - name: extensions-validator
         run: |
           make extensions-validator
@@ -76,12 +95,14 @@ jobs:
       - name: push-extensions-validator
         if: github.event_name != 'pull_request'
         env:
+          PLATFORM: linux/amd64,linux/arm64
           PUSH: "true"
         run: |
           make image-extensions-validator
       - name: push-extensions-validator-latest
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
+          PLATFORM: linux/amd64,linux/arm64
           PUSH: "true"
         run: |
           make image-extensions-validator IMAGE_TAG=latest

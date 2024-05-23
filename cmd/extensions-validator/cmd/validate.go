@@ -7,9 +7,8 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"strings"
+	"regexp"
 
-	"github.com/blang/semver/v4"
 	"github.com/siderolabs/talos/pkg/machinery/extensions"
 	"github.com/spf13/cobra"
 )
@@ -28,6 +27,29 @@ var validateCmd = &cobra.Command{
 var (
 	rootfsPath string
 	pkgName    string
+
+	// semverRegex is a regex to match a semver version.
+	semverRegex = regexp.MustCompile(`^v?(\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)$`)
+	// yyyymmddRegex is a regex to match a yyyymmdd date.
+	// Eg:
+	// 		20210914
+	// 		20210914.1
+	yyyymmddRegex = regexp.MustCompile(`^\d{8}(\.\d)?$`)
+	// buildArgRegex is a regex to match a build arg version.
+	// Eg:
+	// 		535.129.03-v1.8.0-alpha.0-10-g336fa0f-dirty
+	// 		535.129.03-v1.8.0-alpha.0-10-g336fa0f
+	buildArgRegex = regexp.MustCompile(`^(\d+\.\d+\.\d+)-v(\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)-(\d+)-g([0-9a-f]+)(-dirty)?$`)
+	// commitBuildArgRegex is a regex to match a commit build arg version.
+	// Eg:
+	// 		5815ee3-v1.8.0-alpha.0-10-g336fa0f-dirty
+	// 		5815ee3-v1.8.0-alpha.0-10-g336fa0f
+	commitBuildArgRegex = regexp.MustCompile(`^([0-9a-f]+)-v(\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)-(\d+)-g([0-9a-f]+)(-dirty)?$`)
+	// partialSemverRegex is a regex to match a partial semver version.
+	// Eg:
+	// 		v4.3
+	// 		4.3
+	partialSemverRegex = regexp.MustCompile(`^v?(\d+\.\d+)$`)
 )
 
 func init() {
@@ -54,8 +76,14 @@ func validateRootfs() error {
 	}
 
 	// validate extension version
-	if _, err := semver.Parse(strings.TrimPrefix(extension.Manifest.Metadata.Version, "v")); err != nil {
-		return fmt.Errorf("error parsing extension with version %s, : %w", extension.Manifest.Metadata.Version, err)
+	switch _ = extension.Manifest.Metadata.Version; {
+	case semverRegex.MatchString(extension.Manifest.Metadata.Version):
+	case yyyymmddRegex.MatchString(extension.Manifest.Metadata.Version):
+	case buildArgRegex.MatchString(extension.Manifest.Metadata.Version):
+	case commitBuildArgRegex.MatchString(extension.Manifest.Metadata.Version):
+	case partialSemverRegex.MatchString(extension.Manifest.Metadata.Version):
+	default:
+		return fmt.Errorf("invalid version format %s for extension: %s", extension.Manifest.Metadata.Version, extension.Manifest.Metadata.Name)
 	}
 
 	return extension.Validate()

@@ -39,12 +39,12 @@ var (
 	// Eg:
 	// 		535.129.03-v1.8.0-alpha.0-10-g336fa0f-dirty
 	// 		535.129.03-v1.8.0-alpha.0-10-g336fa0f
-	buildArgRegex = regexp.MustCompile(`^(\d+\.\d+\.\d+)-v(\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)-(\d+)-g([0-9a-f]+)(-dirty)?$`)
+	buildArgRegex = regexp.MustCompile(`^(\d+\.\d+\.\d+)-v(\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)(-(\d+)-g([0-9a-f]+)(-dirty)?)?$`)
 	// commitBuildArgRegex is a regex to match a commit build arg version.
 	// Eg:
 	// 		5815ee3-v1.8.0-alpha.0-10-g336fa0f-dirty
 	// 		5815ee3-v1.8.0-alpha.0-10-g336fa0f
-	commitBuildArgRegex = regexp.MustCompile(`^([0-9a-f]+)-v(\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)-(\d+)-g([0-9a-f]+)(-dirty)?$`)
+	commitBuildArgRegex = regexp.MustCompile(`^([0-9a-f]+)-v(\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?)(-(\d+)-g([0-9a-f]+)(-dirty)?)?$`)
 	// partialSemverRegex is a regex to match a partial semver version.
 	// Eg:
 	// 		v4.3

@@ -3,7 +3,7 @@ module github.com/siderolabs/extensions-validator
 go 1.23.2
 
 require (
-	github.com/siderolabs/talos/pkg/machinery v1.9.0-alpha.0
+	github.com/siderolabs/talos/pkg/machinery v1.9.0-alpha.0.0.20241023170325-8680351c131d
 	github.com/spf13/cobra v1.8.1
 )
 

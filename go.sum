@@ -28,8 +28,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/siderolabs/crypto v0.5.0 h1:+Sox0aYLCcD0PAH2cbEcx557zUrONLtuj1Ws+2MFXGc=
 github.com/siderolabs/crypto v0.5.0/go.mod h1:hsR3tJ3aaeuhCChsLF4dBd9vlJVPvmhg4vvx2ez4aD4=
-github.com/siderolabs/talos/pkg/machinery v1.9.0-alpha.0 h1:MMQlCVlS387FfL/W2xeIxy1YeNNu9DG0oUa7oMNCUDA=
-github.com/siderolabs/talos/pkg/machinery v1.9.0-alpha.0/go.mod h1:NkpaDWY1GoFqXlzCPw+5kIf1oibbUxxN1mYuKgnBtgI=
+github.com/siderolabs/talos/pkg/machinery v1.9.0-alpha.0.0.20241023170325-8680351c131d h1:NFbiNFq6/pNS2WXsYs/oqmvWTX2DUmAgk1dmKBvmSeM=
+github.com/siderolabs/talos/pkg/machinery v1.9.0-alpha.0.0.20241023170325-8680351c131d/go.mod h1:NkpaDWY1GoFqXlzCPw+5kIf1oibbUxxN1mYuKgnBtgI=
 github.com/spf13/cobra v1.8.1 h1:e5/vxKd/rZsfSJMUX1agtjeTDf+qv1/JdBF8gg5k9ZM=
 github.com/spf13/cobra v1.8.1/go.mod h1:wHxEcudfqmLYa8iTfL+OuZPbBZkmvliBWKIezN3kD9Y=
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=

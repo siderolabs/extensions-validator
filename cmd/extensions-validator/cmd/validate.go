@@ -86,5 +86,8 @@ func validateRootfs() error {
 		return fmt.Errorf("invalid version format %s for extension: %s", extension.Manifest.Metadata.Version, extension.Manifest.Metadata.Name)
 	}
 
-	return extension.Validate()
+	return extension.Validate(
+		extensions.WithValidateConstraints(),
+		extensions.WithValidateContents(),
+	)
 }

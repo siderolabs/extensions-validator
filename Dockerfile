@@ -1,22 +1,22 @@
-# syntax = docker/dockerfile-upstream:1.11.1-labs
+# syntax = docker/dockerfile-upstream:1.12.1-labs
 
 # THIS FILE WAS AUTOMATICALLY GENERATED, PLEASE DO NOT EDIT.
 #
-# Generated on 2024-11-13T12:28:31Z by kres c0e2b63.
+# Generated on 2025-02-10T10:51:59Z by kres 48878ff.
 
 ARG TOOLCHAIN
 
-FROM ghcr.io/siderolabs/ca-certificates:v1.8.0 AS image-ca-certificates
+FROM ghcr.io/siderolabs/ca-certificates:v1.10.0-alpha.0-35-g85f8901 AS image-ca-certificates
 
-FROM ghcr.io/siderolabs/fhs:v1.8.0 AS image-fhs
+FROM ghcr.io/siderolabs/fhs:v1.10.0-alpha.0-35-g85f8901 AS image-fhs
 
 # runs markdownlint
-FROM docker.io/oven/bun:1.1.34-alpine AS lint-markdown
+FROM docker.io/oven/bun:1.1.43-alpine AS lint-markdown
 WORKDIR /src
-RUN bun i markdownlint-cli@0.42.0 sentences-per-line@0.2.1
+RUN bun i markdownlint-cli@0.43.0 sentences-per-line@0.3.0
 COPY .markdownlint.json .
 COPY ./README.md ./README.md
-RUN bunx markdownlint --ignore "CHANGELOG.md" --ignore "**/node_modules/**" --ignore '**/hack/chglog/**' --rules node_modules/sentences-per-line/index.js .
+RUN bunx markdownlint --ignore "CHANGELOG.md" --ignore "**/node_modules/**" --ignore '**/hack/chglog/**' --rules sentences-per-line .
 
 # base toolchain image
 FROM --platform=${BUILDPLATFORM} ${TOOLCHAIN} AS toolchain

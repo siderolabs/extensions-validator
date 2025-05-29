@@ -7,10 +7,14 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
 
 	"github.com/siderolabs/talos/pkg/machinery/extensions"
+	"github.com/siderolabs/talos/pkg/machinery/extensions/services"
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 )
 
 var validateCmd = &cobra.Command{
@@ -84,6 +88,29 @@ func validateRootfs() error {
 	case partialSemverRegex.MatchString(extension.Manifest.Metadata.Version):
 	default:
 		return fmt.Errorf("invalid version format %s for extension: %s", extension.Manifest.Metadata.Version, extension.Manifest.Metadata.Name)
+	}
+
+	// find all yaml files in usr/local/etc/containers
+	extensionServiceSpecFiles, err := filepath.Glob(filepath.Join(extension.RootfsPath(), "usr/local/etc/containers", "*.yaml"))
+	if err != nil {
+		return fmt.Errorf("error finding service spec files: %w", err)
+	}
+
+	for _, extensionServiceSpecFile := range extensionServiceSpecFiles {
+		var extensionServiceSpec services.Spec
+
+		extensionServiceSpecData, err := os.ReadFile(extensionServiceSpecFile)
+		if err != nil {
+			return fmt.Errorf("error reading service spec file %s: %w", extensionServiceSpecFile, err)
+		}
+
+		if err := yaml.Unmarshal(extensionServiceSpecData, &extensionServiceSpec); err != nil {
+			return fmt.Errorf("error unmarshalling service spec file %s: %w", filepath.Base(extensionServiceSpecFile), err)
+		}
+
+		if err := extensionServiceSpec.Validate(); err != nil {
+			return fmt.Errorf("error validating service spec file %s: %w", filepath.Base(extensionServiceSpecFile), err)
+		}
 	}
 
 	return extension.Validate(

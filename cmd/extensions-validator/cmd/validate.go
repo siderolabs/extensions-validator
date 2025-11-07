@@ -14,7 +14,7 @@ import (
 	"github.com/siderolabs/talos/pkg/machinery/extensions"
 	"github.com/siderolabs/talos/pkg/machinery/extensions/services"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v4"
 )
 
 var validateCmd = &cobra.Command{

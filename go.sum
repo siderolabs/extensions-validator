@@ -60,6 +60,8 @@ github.com/siderolabs/crypto v0.6.5 h1:Elq5tpWP2ApZ4Y+Kg+eIDiiWbmriCPI1mjYIMwvsY
 github.com/siderolabs/crypto v0.6.5/go.mod h1:QjVcrdJQE1sxhjHqieCgwGdlIYq/xCP2DL53Up8nbU4=
 github.com/siderolabs/talos/pkg/machinery v1.14.0-beta.1.0.20260831190057-d5f53edee65a h1:dX1NUEtb8bG2pjFcjnKjY9cgJY6bNMb6xNuMP3+NgDE=
 github.com/siderolabs/talos/pkg/machinery v1.14.0-beta.1.0.20260831190057-d5f53edee65a/go.mod h1:1d5Ifhgm34wZORpFrp9ZmITG7gNT7u3yKHRKi+hlsro=
+github.com/siderolabs/talos/pkg/machinery v1.14.0 h1:wVaf0IZhJLaOsr8OHvYR8RTDN4Gh9qqStd904eM5RlE=
+github.com/siderolabs/talos/pkg/machinery v1.14.0/go.mod h1:8rhGLm+Se7X/VnTG6InEhagg7zCDUFRwfJjLcqGNw7w=
 github.com/spf13/cobra v1.10.2 h1:DMTTonx5m65Ic0GOoRY2c16WCbHxOOw6xxezuLaBpcU=
 github.com/spf13/cobra v1.10.2/go.mod h1:7C1pvHqHw5A4vrJfjNwvOdzYu0Gml16OCs2GRiTUUS4=
 github.com/spf13/pflag v1.0.9 h1:9exaQaMOCwffKiiiYk6/BndUBv+iRViNW+4lEMi0PvY=
